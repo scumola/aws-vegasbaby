@@ -40,7 +40,7 @@
       "Type" : "AWS::AutoScaling::LaunchConfiguration",
       "Properties" : {
         "KeyName" : { "Ref" : "KeyName" },
-        "ImageId" : "ami-dd2911dc",
+        "ImageId" : "ami-372d1536",
         "SecurityGroups" : [ { "Ref" : "InstanceSecurityGroup" } ],
         "InstanceType" : "t2.micro",
         "IamInstanceProfile": {"Ref": "RootInstanceProfile"},
