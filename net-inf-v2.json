@@ -131,7 +131,7 @@
         "AMI": "ami-ab990e91"
       },
       "ap-northeast-1": {
-        "AMI": "ami-14d86d15"
+        "AMI": "ami-11d6e610"
       },
       "sa-east-1": {
         "AMI": "ami-0439e619"
@@ -250,6 +250,9 @@
           "Key": "Network",
           "Value": { "Fn::Join" : ["-", [{ "Ref": "NetworkName" }, { "Ref": "AWS::Region" }] ]}
         }, {
+          "Key": "Name",
+          "Value": { "Fn::Join" : ["-", [{ "Ref": "NetworkName" }, { "Ref": "AWS::Region" }] ]}
+        }, {
           "Key": "Scheme",
           "Value": "PublicAndPrivate"
         }]
@@ -272,6 +275,9 @@
           "Key": "Network",
           "Value": { "Fn::Join" : ["-", [{ "Ref": "NetworkName" }, { "Ref": "AWS::Region" }] ]}
         }, {
+          "Key": "Name",
+          "Value": { "Fn::Join" : ["-", [{ "Ref": "NetworkName" }, { "Ref": "AWS::Region" }] ]}
+        }, {
           "Key": "Network",
           "Value": "Public"
         }]
@@ -292,6 +298,9 @@
         },
         "Tags": [{
           "Key": "Network",
+          "Value": { "Fn::Join" : ["-", [{ "Ref": "NetworkName" }, { "Ref": "AWS::Region" }] ]}
+        }, {
+          "Key": "Name",
           "Value": { "Fn::Join" : ["-", [{ "Ref": "NetworkName" }, { "Ref": "AWS::Region" }] ]}
         }, {
           "Key": "Network",
@@ -704,6 +713,9 @@
         "SubnetId": {
           "Ref": "PublicSubnet1"
         },
+        "KeyName": {
+          "Ref": "KeyName"
+        },
         "SourceDestCheck": "false",
         "ImageId": {
           "Fn::FindInMap": ["AWSNATAMI", {
@@ -714,7 +726,8 @@
           "Ref": "NATSecurityGroup"
         },{
           "Ref": "BastionSecurityGroup"
-        }]
+        }],
+        "Tags": [ { "Key": "Name", "Value": "net-inf-nat" } ]
       }
     },
 
