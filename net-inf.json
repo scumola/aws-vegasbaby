@@ -7,7 +7,7 @@
       "Description" : "Name of an existing EC2 KeyPair to enable SSH access to the bastion host",
       "Type" : "AWS::EC2::KeyPair::KeyName",
       "ConstraintDescription" : "must be the name of an existing EC2 KeyPair."
-    },
+    }
   },
 
   "Resources" : {
@@ -109,18 +109,13 @@
 
     "NATHost" : {
       "Type" : "AWS::EC2::Instance",
-      "DependsOn" : "GatewayToInternet",
+      "DependsOn" : "InternetGateway",
       "Properties" : {
         "InstanceType" : "m1.small",
         "KeyName"  : { "Ref" : "KeyName" },
         "ImageId"  : "ami-11d6e610",
-        "NetworkInterfaces" : [{
-          "GroupSet"                 : [{ "Ref" : "PublicSecurityGroup" }],
-          "AssociatePublicIpAddress" : "true",
-          "DeviceIndex"              : "0",
-          "DeleteOnTermination"      : "true",
-          "SubnetId"                 : { "Ref" : "PublicSubnet" }
-        }]
+        "SecurityGroups : [ { "Ref" : "PublicSecurityGroup" } ],
+        "SubnetId"                 : { "Ref" : "PublicSubnet" }
       }
     },
     "PublicSecurityGroup" : {
@@ -147,12 +142,6 @@
       }
     }
 
-  },
-
-  "Outputs" : {
-    "URL" : {
-      "Value" : { "Fn::Join" : [ "", ["http://", { "Fn::GetAtt" : ["WebServerInstance", "PublicIp"] }]]},
-      "Description" : "Newly created application URL"
-    }
   }
+
 }
