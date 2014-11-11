@@ -16,7 +16,7 @@
       "Type" : "AWS::EC2::VPC",
       "Properties" : {
         "CidrBlock" : "10.0.0.0/16",
-        "Tags" : [ {"Key" : "Application", "Value" : { "Ref" : "AWS::StackId"} } ]
+        "Tags" : [ {"Key" : "Name", "Value" : { "Ref" : "AWS::StackId"} } ]
       }
     },
 
@@ -26,7 +26,7 @@
         "VpcId" : { "Ref" : "VPC" },
         "CidrBlock" : "10.0.0.0/24",
         "Tags" : [ {"Key" : "Application", "Value" : { "Ref" : "AWS::StackId"} },
-          { "Key" : "Network", "Value" : "Public" } ]
+          { "Key" : "Name", "Value" : "Public" } ]
       }
     },
     "PrivateSubnet" : {
@@ -35,7 +35,7 @@
         "VpcId" : { "Ref" : "VPC" },
         "CidrBlock" : "10.0.1.0/24",
         "Tags" : [ {"Key" : "Application", "Value" : { "Ref" : "AWS::StackId"} },
-          { "Key" : "Network", "Value" : "Private" } ]
+          { "Key" : "Name", "Value" : "Private" } ]
       }
     },
 
@@ -106,6 +106,27 @@
     },
 
 
+    "NATInterface" : {
+      "Type" : "AWS::EC2::NetworkInterface",
+      "Properties" : {
+        "GroupSet" : [ { "Ref" : "PublicSecurityGroup" } ],
+        "SubnetId" : { "Ref" : "PublicSubnet" },
+        "SourceDestCheck" : "false"
+      }
+    },
+    "NATEIP" : {
+      "Type" : "AWS::EC2::EIP",
+      "Properties": {
+        "Domain" : "vpc"
+      }
+    },
+    "NATEIPAssociation" : {
+      "Type" : "AWS::EC2::EIPAssociation",
+      "Properties" : {
+        "AllocationId" : { "Ref" : "NATEIP" },
+        "NetworkInterfaceId" : { "Fn::GetAtt": [ "NATEIP", "AllocationId" ] }
+      }
+    },
 
     "NATHost" : {
       "Type" : "AWS::EC2::Instance",
@@ -114,8 +135,8 @@
         "InstanceType" : "m1.small",
         "KeyName"  : { "Ref" : "KeyName" },
         "ImageId"  : "ami-11d6e610",
-        "SecurityGroups" : [ { "Ref" : "PublicSecurityGroup" } ],
-        "SubnetId"       : { "Ref" : "PublicSubnet" }
+        "NetworkInterfaces" : [ {
+           "NetworkInterfaceId" : {"Ref" : "NATInterface"}, "DeviceIndex" : "0" } ]
       }
     },
     "PublicSecurityGroup" : {
