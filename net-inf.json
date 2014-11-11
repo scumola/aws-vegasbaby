@@ -114,8 +114,8 @@
         "InstanceType" : "m1.small",
         "KeyName"  : { "Ref" : "KeyName" },
         "ImageId"  : "ami-11d6e610",
-        "SecurityGroups : [ { "Ref" : "PublicSecurityGroup" } ],
-        "SubnetId"                 : { "Ref" : "PublicSubnet" }
+        "SecurityGroups" : [ { "Ref" : "PublicSecurityGroup" } ],
+        "SubnetId"       : { "Ref" : "PublicSubnet" }
       }
     },
     "PublicSecurityGroup" : {
