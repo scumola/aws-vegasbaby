@@ -106,25 +106,12 @@
     },
 
 
-    "NATInterface" : {
-      "Type" : "AWS::EC2::NetworkInterface",
-      "Properties" : {
-        "GroupSet" : [ { "Ref" : "PublicSecurityGroup" } ],
-        "SubnetId" : { "Ref" : "PublicSubnet" },
-        "SourceDestCheck" : "false"
-      }
-    },
-    "NATEIP" : {
+    "NATIPAddress": {
       "Type" : "AWS::EC2::EIP",
+      "DependsOn" : "InternetGateway",
       "Properties": {
-        "Domain" : "vpc"
-      }
-    },
-    "NATEIPAssociation" : {
-      "Type" : "AWS::EC2::EIPAssociation",
-      "Properties" : {
-        "AllocationId" : { "Ref" : "NATEIP" },
-        "NetworkInterfaceId" : { "Fn::GetAtt": [ "NATEIP", "AllocationId" ] }
+        "Domain": "vpc",
+        "InstanceId": { "Ref": "NATHost" }
       }
     },
 
@@ -135,8 +122,9 @@
         "InstanceType" : "m1.small",
         "KeyName"  : { "Ref" : "KeyName" },
         "ImageId"  : "ami-11d6e610",
-        "NetworkInterfaces" : [ {
-           "NetworkInterfaceId" : {"Ref" : "NATInterface"}, "DeviceIndex" : "0" } ]
+        "SubnetId" : { "Ref" : "PublicSubnet" },
+        "SourceDestCheck": "false",
+        "SecurityGroupIds" : [{"Ref" : "PublicSecurityGroup"}]
       }
     },
     "PublicSecurityGroup" : {
