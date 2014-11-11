@@ -40,17 +40,13 @@
       "Type" : "AWS::AutoScaling::LaunchConfiguration",
       "Properties" : {
         "KeyName" : { "Ref" : "KeyName" },
-        "ImageId" : "ami-4985b048",
+        "ImageId" : "ami-dd2911dc",
         "SecurityGroups" : [ { "Ref" : "InstanceSecurityGroup" } ],
         "InstanceType" : "t2.micro",
         "IamInstanceProfile": {"Ref": "RootInstanceProfile"},
         "UserData" : { "Fn::Base64" : { "Fn::Join" : ["", [
              "#!/bin/bash\n",
              "exec > >(tee /var/log/user-data.log|logger -t user-data -s 2>/dev/console) 2>&1\n",
-             "yum install -y ImageMagick\n",
-             "easy_install argparse\n",
-             "mkdir /home/ec2-user/jobs\n",
-             "wget -O /home/ec2-user/image_processor.py https://us-west-2-aws-training.s3.amazonaws.com/architecting-lab-3-creating-a-batch-processing-cluster-3.1/static/image_processor.py\n",
              "/usr/bin/python /home/ec2-user/image_processor.py &"
         ]]}}
       }
