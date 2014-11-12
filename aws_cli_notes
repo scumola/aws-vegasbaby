@@ -1,0 +1,2 @@
+Make SQS public
+aws --region ap-northeast-1 sqs set-queue-attributes --attributes '{"Policy": "{\"Version\": \"2008-10-17\",\"Id\": \"arn:aws:sqs:ap-northeast-1:228351239507:input/SQSDefaultPolicy\",\"Statement\": [{\"Effect\": \"Allow\",\"Principal\": {\"AWS\": \"*\"},\"Action\": \"SQS:SendMessage\",\"Resource\": \"arn:aws:sqs:ap-northeast-1:228351239507:input\"}]}"}' --queue-url https://sqs.ap-northeast-1.amazonaws.com/228351239507/input
